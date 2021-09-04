@@ -25,14 +25,21 @@ namespace WebAPI.Controllers
 
         // GET: api/Notas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Nota>>> GetNota()
+        public async Task<ActionResult<IEnumerable<NotaDTO>>> GetNota()
         {
-            return await _context.Notas.ToListAsync();
+            return await _context.Notas.Select(x => new NotaDTO 
+            {
+                Estudiante = x.Estudiante.Nombre,
+                Profesor = x.Profesor.Nombre,
+                Valor = x.Valor,
+                Nombre = x.Nombre,
+                NotaID = x.NotaID
+            }).ToListAsync();
         }
 
         // GET: api/Notas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Nota>> GetNota(int id)
+        public async Task<ActionResult<NotaDTO>> GetNota(int id)
         {
             var nota = await _context.Notas.FindAsync(id);
 
@@ -41,20 +48,34 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
 
-            return nota;
+            return new NotaDTO
+            {
+                Estudiante = nota.Estudiante.Nombre,
+                Profesor = nota.Profesor.Nombre,
+                Valor = nota.Valor,
+                Nombre = nota.Nombre,
+                NotaID = nota.NotaID
+            };
         }
 
         // PUT: api/Notas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutNota(int id, Nota nota)
+        public async Task<IActionResult> PutNota(int id, NotaDTO nota)
         {
             if (id != nota.NotaID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(nota).State = EntityState.Modified;
+            var _nota = _context.Notas.FirstOrDefaultAsync(x => x.NotaID == id).Result;
+            if (_nota == null)
+                return NotFound();
+
+            _nota.Nombre = nota.Nombre;
+            _nota.Valor = nota.Valor;
+
+            _context.Entry(_nota).State = EntityState.Modified;
 
             try
             {
@@ -78,12 +99,19 @@ namespace WebAPI.Controllers
         // POST: api/Notas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Nota>> PostNota(Nota nota)
+        public async Task<ActionResult<Nota>> PostNota(NotaPOST nota)
         {
-            _context.Notas.Add(nota);
+            var newNota = new Nota
+            {
+                EstudianteID = nota.EstudianteID,
+                Nombre = nota.Nombre,
+                ProfesorID = nota.ProfesorID,
+                Valor = nota.Valor,
+            };
+            _context.Notas.Add(newNota);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetNota", new { id = nota.NotaID }, nota);
+            return CreatedAtAction("GetNota", new { id = newNota.NotaID }, newNota);
         }
 
         // DELETE: api/Notas/5

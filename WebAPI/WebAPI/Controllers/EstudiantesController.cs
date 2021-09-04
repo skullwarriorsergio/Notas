@@ -76,12 +76,16 @@ namespace WebAPI.Controllers
 
         // POST: api/Estudiantes
         [HttpPost]
-        public async Task<ActionResult<Estudiante>> PostEstudiante(Estudiante estudiante)
+        public async Task<ActionResult<Estudiante>> PostEstudiante(EstudiantePOST estudiante)
         {
-            _context.Estudiantes.Add(estudiante);
+            var newEstudiante = new Estudiante
+            {
+                Nombre = estudiante.Nombre
+            };
+            _context.Estudiantes.Add(newEstudiante);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEstudiante", new { id = estudiante.EstudianteID }, estudiante);
+            return CreatedAtAction("GetEstudiante", new { id = newEstudiante.EstudianteID }, newEstudiante);
         }
 
         // DELETE: api/Estudiantes/5

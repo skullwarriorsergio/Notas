@@ -10,4 +10,9 @@ namespace WebAPI.Models
         public int EstudianteID { get; set; }
         public string Nombre { get; set; }
     }
+
+    public class EstudiantePOST
+    {
+        public string Nombre { get; set; }
+    }
 }

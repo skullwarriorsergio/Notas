@@ -1,17 +1,22 @@
 export type Estudiante = {
-    id: string
+    estudianteID: number
     nombre: string
 }
 
 export type Profesor = {
-    id: string
+    profesorID: number
+    nombre: string
+}
+
+export type ListItemData = {
+    id: number
     nombre: string
 }
 
 export type Nota = {
-    id: string
+    notaID: number
     nombre: string
     valor: number
-    profesor: string
-    estudiante: string
+    profesor:string
+    estudiante:string
 }

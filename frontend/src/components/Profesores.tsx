@@ -11,9 +11,10 @@ import {
     Container
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Estudiante } from "../utils/types";
+import { Estudiante, Profesor } from "../utils/types";
 import { getEstudiantes } from '../utils/apiHelper'
 import EstudianteCard from "./EstudianteCard";
+import ProfesorCard from "./ProfesorCard";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -34,11 +35,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 type Props = {
-    data: Estudiante[]
+    data: Profesor[]
     onDelete : any
 }
 
-const Estudiantes = ({data, onDelete}: Props) => {
+const Profesores = ({data, onDelete}: Props) => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState<string | false>(false);
     const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
@@ -52,20 +53,20 @@ const Estudiantes = ({data, onDelete}: Props) => {
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
                 >
-                    <Typography className={classes.heading}>Lista de estudiantes</Typography>
+                    <Typography className={classes.heading}>Lista de profesores</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Grid container direction="row" justifyContent="flex-start">
+                    <Grid container justifyContent="flex-start">
                         {(() => {
                             if (data?.some(x => x)){
                                 return (
                                     data?.map((item) =>
                                 // eslint-disable-next-line react/jsx-key
-                                <EstudianteCard data={item} onDelete={onDelete} />)
+                                <ProfesorCard data={item} onDelete={onDelete} />)
                                 )
                             }              
                             return (
-                            <Typography className={classes.secondaryHeading}>No hay usuarios registrados</Typography>
+                            <Typography className={classes.secondaryHeading}>No hay profesores registrados</Typography>
                             )
                         })()
                         }
@@ -76,4 +77,4 @@ const Estudiantes = ({data, onDelete}: Props) => {
     )
 }
 
-export default Estudiantes
+export default Profesores

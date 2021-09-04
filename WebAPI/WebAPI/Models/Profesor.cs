@@ -11,4 +11,9 @@ namespace WebAPI.Models
 
         public string Nombre { get; set; }
     }
+
+    public class ProfesorPOST
+    {
+        public string Nombre { get; set; }
+    }
 }

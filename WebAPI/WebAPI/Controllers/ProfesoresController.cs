@@ -78,12 +78,16 @@ namespace WebAPI.Controllers
         // POST: api/Profesores
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Profesor>> PostProfesor(Profesor profesor)
+        public async Task<ActionResult<Profesor>> PostProfesor(ProfesorPOST profesor)
         {
-            _context.Profesores.Add(profesor);
+            var newProfesor = new Profesor
+            {
+                Nombre = profesor.Nombre
+            };
+            _context.Profesores.Add(newProfesor);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProfesor", new { id = profesor.ProfesorID }, profesor);
+            return CreatedAtAction("GetProfesor", new { id = newProfesor.ProfesorID }, newProfesor);
         }
 
         // DELETE: api/Profesores/5
