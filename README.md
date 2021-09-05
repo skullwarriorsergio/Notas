@@ -1,4 +1,4 @@
-# Gateways
+# Notas
 Proyecto de prueba para un manejo simple de estudiantes, profesores y notas 
 
 # Para comenzar
@@ -18,9 +18,11 @@ Proyecto de prueba para un manejo simple de estudiantes, profesores y notas
 
 ## API
    Rutas disponibles:
-	### ```/api/Estudiantes```
+	```/api/Estudiantes```
      METHODS: GET, POST, DELETE
-	### ```/api/Profesores```
+
+	```/api/Profesores```
      METHODS: GET, POST, DELETE
-	### ```/api/Notas```
+	 
+	```/api/Notas```
      METHODS: GET, POST, DELETE
