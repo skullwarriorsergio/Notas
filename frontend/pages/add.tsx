@@ -50,6 +50,8 @@ const Add: NextPage = () => {
   const [estudianteNombre, setEstudianteNombre] = useState<string>("");
   const [profesorNombre, setProfesorNombre] = useState<string>("");
   const [notaNombre, setNotaNombre] = useState<string>("");
+  const [profesorSeleccionado, setPprofesorSeleccionado] = useState<string|undefined>("");
+  const [estudianteSeleccionado, setEstudianteSeleccionado] = useState<string|undefined>("");
   const [valor, setValor] = useState<number>(0);
   const [estudiantes, setEstudiantes] = useState<ListItemData[]>([])
   const [profesores, setProfesores] = useState<ListItemData[]>([])
@@ -71,6 +73,7 @@ const Add: NextPage = () => {
   const handleSubmitEstudiantes = (data: any) => {
     AddEstudiante(estudianteNombre).then((res) =>
     {
+      FetchData()
       setSnackBar({
         open: true,
         message: "Estudiante registrado",
@@ -91,6 +94,7 @@ const Add: NextPage = () => {
   const handleSubmitProfesores = (data: any) => {
     AddProfesor(profesorNombre).then((res) =>
     {
+      FetchData()
       setSnackBar({
         open: true,
         message: "Profesor registrado",
@@ -109,8 +113,27 @@ const Add: NextPage = () => {
   }
 
   const handleSubmitNotas = (data: any) => {
-    const estudianteid = estudiantes.find(x => x.nombre == "")?.id
-    const profesorid = profesores.find(x => x.nombre == "")?.id
+    if (estudianteSeleccionado == undefined)
+    {
+      setSnackBar({
+        open: true,
+        message: "Seleccione un estudiante",
+        severity: ERROR,
+      })
+      return 0       
+    }
+    if (profesorSeleccionado == undefined)
+    {
+      setSnackBar({
+        open: true,
+        message: "Seleccione un profesor",
+        severity: ERROR,
+      })
+      return 0       
+    }
+
+    const estudianteid = estudiantes.find(x => x.nombre == estudianteSeleccionado)?.id
+    const profesorid = profesores.find(x => x.nombre == profesorSeleccionado)?.id
     if (profesorid == undefined)
     {
       setSnackBar({
@@ -148,8 +171,10 @@ const Add: NextPage = () => {
       console.log(err)
     })
   }
-  
-  useEffect(() => {
+
+  //Obtener datos desde el API
+  const FetchData = () =>
+  {
     getEstudiantes()
         .then((res) =>
         {
@@ -164,6 +189,10 @@ const Add: NextPage = () => {
             setProfesores(data)
         })
         .catch((err) => console.log(err))
+  }
+  
+  useEffect(() => {
+    FetchData()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
     
@@ -272,6 +301,7 @@ const Add: NextPage = () => {
               </Grid>
               <Grid item xs={4}>
                 <Autocomplete
+                  onChange={(event, value) => setEstudianteSeleccionado(value?.nombre)}
                   options={estudiantes}
                   getOptionLabel={(option:any) => option.nombre}
                   renderInput={(params) => (
@@ -281,6 +311,7 @@ const Add: NextPage = () => {
               </Grid>
               <Grid item xs={4}>
                 <Autocomplete
+                  onChange={(event, value) => setPprofesorSeleccionado(value?.nombre)}
                   options={profesores}
                   getOptionLabel={(option:any) => option.nombre}
                   renderInput={(params) => (

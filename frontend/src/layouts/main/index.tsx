@@ -9,6 +9,9 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core'
+import AddToPhotosIcon from '@material-ui/icons/AddToPhotos'
+import AssignmentIcon from '@material-ui/icons/Assignment'
+import router from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +23,13 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  overrides: {
+    MuiButton: {
+      raisedPrimary: {
+        color: 'white',
+      },
+    },
+  }
 }))
 
 type Props = {
@@ -31,12 +41,12 @@ const MainLayout = ({ children }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
-  const handleMenu = (event: any) => {
-    setAnchorEl(event.currentTarget)
+  const handleAdd = (event: any) => {
+    router.push("/add")
   }
 
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleList = () => {
+    router.push("/")
   }
 
   return (
@@ -46,7 +56,21 @@ const MainLayout = ({ children }: Props) => {
           <Typography variant="h6" className={classes.title}>
             Ejercicio de prueba: Notas
           </Typography>
-        </Toolbar>
+          <IconButton onClick={handleList}> 
+                  <AssignmentIcon>                    
+                  </AssignmentIcon>
+                  <Typography>
+                      Listar datos
+                  </Typography>
+          </IconButton>
+          <IconButton onClick={handleAdd}> 
+                  <AddToPhotosIcon>                    
+                  </AddToPhotosIcon>
+                  <Typography color="initial">
+                      Adicionar datos
+                  </Typography>
+          </IconButton>
+        </Toolbar>        
       </AppBar>
       {children}
     </main>

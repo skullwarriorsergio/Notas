@@ -1,10 +1,11 @@
 FROM node:14 as build
 WORKDIR /app
 COPY package*.json /app/
+##Establecer proxy para npm
+#RUN npm config set https-proxy http://proxy_ip:proxy_port
+#RUN npm config set proxy http://proxy_ip:proxy_port
 RUN npm install
 COPY ./ /app/
-RUN npm config set https-proxy http://192.168.43.74:51515
-RUN npm config set proxy http://192.168.43.74:51515
 RUN npm run build
 
 FROM nginx:1.15
